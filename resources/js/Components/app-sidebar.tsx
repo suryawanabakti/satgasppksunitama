@@ -1,11 +1,4 @@
-import {
-    Folder,
-    GalleryVerticalEnd,
-    Home,
-    HomeIcon,
-    LayoutDashboard,
-    User,
-} from "lucide-react";
+import { Folder, GalleryVerticalEnd } from "lucide-react";
 import * as React from "react";
 
 import { NavMaster } from "@/Components/nav-master";
@@ -15,17 +8,11 @@ import {
     Sidebar,
     SidebarContent,
     SidebarFooter,
-    SidebarGroup,
-    SidebarGroupContent,
-    SidebarGroupLabel,
     SidebarHeader,
-    SidebarMenu,
-    SidebarMenuButton,
-    SidebarMenuItem,
     SidebarRail,
 } from "@/Components/ui/sidebar";
-import { NavMain } from "./nav-main";
 import { usePage } from "@inertiajs/react";
+import { NavMain } from "./nav-main";
 
 // This is sample data.
 

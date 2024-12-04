@@ -7,6 +7,7 @@ import {
     BreadcrumbSeparator,
 } from "@/Components/ui/breadcrumb";
 import { SidebarProvider, SidebarTrigger } from "@/Components/ui/sidebar";
+import { Toaster } from "@/Components/ui/toaster";
 import { Link } from "@inertiajs/react";
 import React, { PropsWithChildren } from "react";
 
@@ -53,6 +54,7 @@ export default function Authenticated({
                 </header>
                 <div style={{ zoom: "92%" }}>{children}</div>
             </main>
+            <Toaster />
         </SidebarProvider>
     );
 }
