@@ -54,18 +54,19 @@ import {
 } from "./ui/card";
 import { router } from "@inertiajs/react";
 
-export type Users = {
+export type Laporan = {
     id: string;
-    email: string;
-    name: string;
-    created_at: string;
+    title: string;
+    deskripsi: string;
+    status: string;
     updated_at: string;
+    files: any;
 };
 
-export function DataTableUsers({ data }: { data: Users[] }) {
+export function DataTableLaporanUser({ data }: { data: Laporan[] }) {
     const [rowsSelected, setRowsSelected] = React.useState([]);
 
-    const columns: ColumnDef<Users>[] = [
+    const columns: ColumnDef<Laporan>[] = [
         {
             id: "select",
             header: ({ table }) => (
@@ -122,7 +123,7 @@ export function DataTableUsers({ data }: { data: Users[] }) {
             enableSorting: true,
         },
         {
-            accessorKey: "username",
+            accessorKey: "judul",
             header: ({ column }) => {
                 return (
                     <Button
@@ -131,18 +132,18 @@ export function DataTableUsers({ data }: { data: Users[] }) {
                             column.toggleSorting(column.getIsSorted() === "asc")
                         }
                     >
-                        Username
+                        Judul
                         <ArrowUpDown className="ml-2 h-4 w-4" />
                     </Button>
                 );
             },
             cell: ({ row }) => (
-                <div className="lowercase">{row.getValue("username")}</div>
+                <div className="lowercase">{row.getValue("judul")}</div>
             ),
         },
 
         {
-            accessorKey: "name",
+            accessorKey: "deskripsi",
             header: ({ column }) => {
                 return (
                     <Button
@@ -151,15 +152,17 @@ export function DataTableUsers({ data }: { data: Users[] }) {
                             column.toggleSorting(column.getIsSorted() === "asc")
                         }
                     >
-                        Name
+                        Deskripsi
                         <ArrowUpDown className="ml-2 h-4 w-4" />
                     </Button>
                 );
             },
-            cell: ({ row }) => <div className="">{row.getValue("name")}</div>,
+            cell: ({ row }) => (
+                <div className="">{row.getValue("deskripsi")}</div>
+            ),
         },
         {
-            accessorKey: "role",
+            accessorKey: "laporan_gambar",
             header: ({ column }) => {
                 return (
                     <Button
@@ -168,12 +171,57 @@ export function DataTableUsers({ data }: { data: Users[] }) {
                             column.toggleSorting(column.getIsSorted() === "asc")
                         }
                     >
-                        Role
+                        Daftar File
                         <ArrowUpDown className="ml-2 h-4 w-4" />
                     </Button>
                 );
             },
-            cell: ({ row }) => <div className="">{row.getValue("role")}</div>,
+            cell: ({ row }) => {
+                const laporan = row.original; // Dapatkan data asli dari baris
+                console.log(laporan); // Debug untuk melihat data laporan
+
+                // Pastikan `files` adalah array
+                if (!Array.isArray(laporan.files)) {
+                    return <span>No Files</span>; // Handle jika `files` bukan array
+                }
+
+                // Tampilkan data file
+                return (
+                    <div>
+                        {laporan.files.map((file: any, index: number) => (
+                            <div key={index}>
+                                <a
+                                    href={`storage/${file.path}`}
+                                    className="text-primary"
+                                    target="_blank"
+                                >
+                                    Download File {index + 1}
+                                </a>
+                            </div> // Ganti `file` sesuai dengan properti file (contoh: file.name)
+                        ))}
+                    </div>
+                );
+            },
+        },
+
+        {
+            accessorKey: "status",
+            header: ({ column }) => {
+                return (
+                    <Button
+                        variant="ghost"
+                        onClick={() =>
+                            column.toggleSorting(column.getIsSorted() === "asc")
+                        }
+                    >
+                        Status
+                        <ArrowUpDown className="ml-2 h-4 w-4" />
+                    </Button>
+                );
+            },
+            cell: ({ row }) => (
+                <div className="lowercase">{row.original.status}</div>
+            ),
         },
         {
             accessorKey: "created_at",
@@ -199,34 +247,10 @@ export function DataTableUsers({ data }: { data: Users[] }) {
             ),
         },
         {
-            accessorKey: "updated_at",
-            header: ({ column }) => {
-                return (
-                    <Button
-                        variant="ghost"
-                        onClick={() =>
-                            column.toggleSorting(column.getIsSorted() === "asc")
-                        }
-                    >
-                        Updated At
-                        <ArrowUpDown className="ml-2 h-4 w-4" />
-                    </Button>
-                );
-            },
-            cell: ({ row }) => (
-                <div className="">
-                    {" "}
-                    {moment(row.getValue("created_at")).format(
-                        "DD MMM YYYY HH:mm:ss"
-                    )}
-                </div>
-            ),
-        },
-        {
             id: "actions",
             enableHiding: false,
             cell: ({ row }) => {
-                const payment = row.original;
+                const article = row.original;
 
                 return (
                     <DropdownMenu>
@@ -238,9 +262,19 @@ export function DataTableUsers({ data }: { data: Users[] }) {
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                            <DropdownMenuSeparator />
-                            <DropdownMenuItem>Edit</DropdownMenuItem>
-                            <DropdownMenuItem>Hapus</DropdownMenuItem>
+                            <DropdownMenuItem
+                                onClick={() =>
+                                    router.delete(
+                                        route("articles.destroy", article.id),
+                                        {
+                                            preserveScroll: true,
+                                            preserveState: true,
+                                        }
+                                    )
+                                }
+                            >
+                                Delete
+                            </DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
                 );
@@ -289,11 +323,12 @@ export function DataTableUsers({ data }: { data: Users[] }) {
     return (
         <Card className="w-full">
             <CardHeader>
-                <CardTitle>Users Management</CardTitle>
+                <CardTitle>Data Laporan </CardTitle>
                 <CardDescription>
-                    Users Management adalah sistem yang dirancang untuk
-                    mengelola data dan akses pengguna dalam suatu aplikasi atau
-                    platform.
+                    Berikut adalah deskripsi data laporan Satgas PPKS (Satuan
+                    Tugas Pencegahan dan Penanganan Kekerasan Seksual) untuk
+                    antarmuka pengguna, yang dapat membantu merancang fitur atau
+                    tampilan laporan
                 </CardDescription>
             </CardHeader>
 
@@ -305,37 +340,17 @@ export function DataTableUsers({ data }: { data: Users[] }) {
                         onChange={handleFilterChange}
                         className="max-w-sm"
                     />
-                    <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                            <Button variant="outline" className="ml-auto">
-                                Actions <ChevronDown className="ml-2 h-4 w-4" />
-                            </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                            <DropdownMenuItem
-                                onClick={() =>
-                                    router.get(route("users.create"))
-                                }
-                            >
-                                {" "}
-                                <Plus />
-                                <span>Add</span>
-                                <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
-                            </DropdownMenuItem>
-                            <DropdownMenuItem>
-                                {" "}
-                                <Upload />
-                                <span>Import</span>
-                                <DropdownMenuShortcut>⇧⌘I</DropdownMenuShortcut>
-                            </DropdownMenuItem>
-                            <DropdownMenuItem>
-                                {" "}
-                                <Download />
-                                <span>Export</span>
-                                <DropdownMenuShortcut>⇧⌘E</DropdownMenuShortcut>
-                            </DropdownMenuItem>
-                        </DropdownMenuContent>
-                    </DropdownMenu>
+                    <div className="flex gap-2">
+                        <Button
+                            variant="outline"
+                            className="ml-auto"
+                            onClick={() =>
+                                router.get(route("user-laporan.create"))
+                            }
+                        >
+                            Tambah Laporan
+                        </Button>
+                    </div>
                 </div>
                 <div className="rounded-md border">
                     <Table>

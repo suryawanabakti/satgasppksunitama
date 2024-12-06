@@ -20,7 +20,7 @@ export function LoginForm({
     canResetPassword: boolean;
 }) {
     const { data, setData, post, processing, errors, reset } = useForm({
-        email: "",
+        username: "",
         password: "",
         remember: false,
     });
@@ -38,20 +38,22 @@ export function LoginForm({
             <CardHeader>
                 <CardTitle className="text-2xl">Login</CardTitle>
                 <CardDescription>
-                    Enter your email below to login to your account
+                    Masukkan username dan password anda di form bawah ini.
                 </CardDescription>
             </CardHeader>
             <CardContent>
                 <div className="grid gap-4">
                     <div className="grid gap-2">
-                        <Label htmlFor="email">Email</Label>
+                        <Label htmlFor="username">Username</Label>
                         <Input
-                            id="email"
-                            type="email"
-                            placeholder="m@example.com"
+                            id="username"
+                            type="username"
+                            placeholder="Masukkan username anda..."
                             required
-                            value={data.email}
-                            onChange={(e) => setData("email", e.target.value)}
+                            value={data.username}
+                            onChange={(e) =>
+                                setData("username", e.target.value)
+                            }
                         />
                     </div>
                     <div className="grid gap-2">
@@ -72,20 +74,17 @@ export function LoginForm({
                             onChange={(e) =>
                                 setData("password", e.target.value)
                             }
+                            placeholder="***********"
                         />
                     </div>
-                    <Button type="submit" className="w-full" onClick={submit}>
+                    <Button
+                        type="submit"
+                        className="w-full"
+                        onClick={submit}
+                        disabled={processing}
+                    >
                         Login
                     </Button>
-                    <Button variant="outline" className="w-full">
-                        Login with Google
-                    </Button>
-                </div>
-                <div className="mt-4 text-center text-sm">
-                    Don&apos;t have an account?{" "}
-                    <Link href="#" className="underline">
-                        Sign up
-                    </Link>
                 </div>
             </CardContent>
         </Card>

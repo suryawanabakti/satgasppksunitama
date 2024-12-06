@@ -21,14 +21,14 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     const data = {
         user: {
             name: user.name,
-            email: user.email,
+            username: user.username,
             avatar: "/avatars/shadcn.jpg",
         },
         teams: [
             {
-                name: "Square Dev",
+                name: "UNITAMA",
                 logo: GalleryVerticalEnd,
-                plan: "Super Admin",
+                plan: "Satgas PPKS",
             },
         ],
         navMaster: [
@@ -41,7 +41,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                     {
                         title: "Users",
                         url: "/users",
-                        name: "users",
+                        name: "users*",
                     },
                 ],
             },
@@ -54,8 +54,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 <TeamSwitcher teams={data.teams} />
             </SidebarHeader>
             <SidebarContent>
-                <NavMain />
-                <NavMaster items={data.navMaster} />
+                <NavMain user={user} />
+                <NavMaster user={user} items={data.navMaster} />
             </SidebarContent>
             <SidebarFooter>
                 <NavUser user={data.user} />

@@ -32,7 +32,7 @@ export function NavUser({
 }: {
     user: {
         name: string;
-        email: string;
+        username: string;
         avatar: string;
     };
 }) {
@@ -61,7 +61,7 @@ export function NavUser({
                                     {user.name}
                                 </span>
                                 <span className="truncate lowercase text-xs">
-                                    {user.email}
+                                    {user.username}
                                 </span>
                             </div>
                             <ChevronsUpDown className="ml-auto size-4" />
@@ -89,7 +89,7 @@ export function NavUser({
                                         {user.name}
                                     </span>
                                     <span className="truncate text-xs">
-                                        {user.email}
+                                        {user.username}
                                     </span>
                                 </div>
                             </div>

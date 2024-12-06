@@ -8,7 +8,7 @@ import {
 } from "@/Components/ui/breadcrumb";
 import { SidebarProvider, SidebarTrigger } from "@/Components/ui/sidebar";
 import { Toaster } from "@/Components/ui/toaster";
-import { Link } from "@inertiajs/react";
+import { Link, router } from "@inertiajs/react";
 import React, { PropsWithChildren } from "react";
 
 export default function Authenticated({

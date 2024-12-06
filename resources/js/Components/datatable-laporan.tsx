@@ -54,18 +54,18 @@ import {
 } from "./ui/card";
 import { router } from "@inertiajs/react";
 
-export type Users = {
+export type Laporan = {
     id: string;
-    email: string;
-    name: string;
-    created_at: string;
+    title: string;
+    deskripsi: string;
+    status: string;
     updated_at: string;
 };
 
-export function DataTableUsers({ data }: { data: Users[] }) {
+export function DataTableLaporan({ data }: { data: Laporan[] }) {
     const [rowsSelected, setRowsSelected] = React.useState([]);
 
-    const columns: ColumnDef<Users>[] = [
+    const columns: ColumnDef<Laporan>[] = [
         {
             id: "select",
             header: ({ table }) => (
@@ -122,7 +122,7 @@ export function DataTableUsers({ data }: { data: Users[] }) {
             enableSorting: true,
         },
         {
-            accessorKey: "username",
+            accessorKey: "Judul",
             header: ({ column }) => {
                 return (
                     <Button
@@ -131,18 +131,18 @@ export function DataTableUsers({ data }: { data: Users[] }) {
                             column.toggleSorting(column.getIsSorted() === "asc")
                         }
                     >
-                        Username
+                        Judul
                         <ArrowUpDown className="ml-2 h-4 w-4" />
                     </Button>
                 );
             },
             cell: ({ row }) => (
-                <div className="lowercase">{row.getValue("username")}</div>
+                <div className="lowercase">{row.getValue("judul")}</div>
             ),
         },
 
         {
-            accessorKey: "name",
+            accessorKey: "deskripsi",
             header: ({ column }) => {
                 return (
                     <Button
@@ -151,15 +151,17 @@ export function DataTableUsers({ data }: { data: Users[] }) {
                             column.toggleSorting(column.getIsSorted() === "asc")
                         }
                     >
-                        Name
+                        Deskripsi
                         <ArrowUpDown className="ml-2 h-4 w-4" />
                     </Button>
                 );
             },
-            cell: ({ row }) => <div className="">{row.getValue("name")}</div>,
+            cell: ({ row }) => (
+                <div className="">{row.getValue("deskripsi")}</div>
+            ),
         },
         {
-            accessorKey: "role",
+            accessorKey: "laporan_gambar",
             header: ({ column }) => {
                 return (
                     <Button
@@ -168,12 +170,12 @@ export function DataTableUsers({ data }: { data: Users[] }) {
                             column.toggleSorting(column.getIsSorted() === "asc")
                         }
                     >
-                        Role
+                        Daftar Gambar
                         <ArrowUpDown className="ml-2 h-4 w-4" />
                     </Button>
                 );
             },
-            cell: ({ row }) => <div className="">{row.getValue("role")}</div>,
+            cell: ({ row }) => <div className=""></div>,
         },
         {
             accessorKey: "created_at",
@@ -198,35 +200,12 @@ export function DataTableUsers({ data }: { data: Users[] }) {
                 </div>
             ),
         },
-        {
-            accessorKey: "updated_at",
-            header: ({ column }) => {
-                return (
-                    <Button
-                        variant="ghost"
-                        onClick={() =>
-                            column.toggleSorting(column.getIsSorted() === "asc")
-                        }
-                    >
-                        Updated At
-                        <ArrowUpDown className="ml-2 h-4 w-4" />
-                    </Button>
-                );
-            },
-            cell: ({ row }) => (
-                <div className="">
-                    {" "}
-                    {moment(row.getValue("created_at")).format(
-                        "DD MMM YYYY HH:mm:ss"
-                    )}
-                </div>
-            ),
-        },
+
         {
             id: "actions",
             enableHiding: false,
             cell: ({ row }) => {
-                const payment = row.original;
+                const article = row.original;
 
                 return (
                     <DropdownMenu>
@@ -238,9 +217,19 @@ export function DataTableUsers({ data }: { data: Users[] }) {
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                            <DropdownMenuSeparator />
-                            <DropdownMenuItem>Edit</DropdownMenuItem>
-                            <DropdownMenuItem>Hapus</DropdownMenuItem>
+                            <DropdownMenuItem
+                                onClick={() =>
+                                    router.delete(
+                                        route("articles.destroy", article.id),
+                                        {
+                                            preserveScroll: true,
+                                            preserveState: true,
+                                        }
+                                    )
+                                }
+                            >
+                                Delete
+                            </DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
                 );
@@ -289,11 +278,13 @@ export function DataTableUsers({ data }: { data: Users[] }) {
     return (
         <Card className="w-full">
             <CardHeader>
-                <CardTitle>Users Management</CardTitle>
+                <CardTitle>Persetujuan Laporan (Satgas PPKS)</CardTitle>
                 <CardDescription>
-                    Users Management adalah sistem yang dirancang untuk
-                    mengelola data dan akses pengguna dalam suatu aplikasi atau
-                    platform.
+                    Persetujuan Laporan (Satgas PPKS) merujuk pada proses formal
+                    dalam menangani laporan kekerasan seksual yang diterima oleh
+                    Satuan Tugas Pencegahan dan Penanganan Kekerasan Seksual
+                    (Satgas PPKS) di lingkungan institusi pendidikan, seperti
+                    universitas.
                 </CardDescription>
             </CardHeader>
 
@@ -305,37 +296,21 @@ export function DataTableUsers({ data }: { data: Users[] }) {
                         onChange={handleFilterChange}
                         className="max-w-sm"
                     />
-                    <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                            <Button variant="outline" className="ml-auto">
-                                Actions <ChevronDown className="ml-2 h-4 w-4" />
-                            </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                            <DropdownMenuItem
-                                onClick={() =>
-                                    router.get(route("users.create"))
-                                }
-                            >
-                                {" "}
-                                <Plus />
-                                <span>Add</span>
-                                <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
-                            </DropdownMenuItem>
-                            <DropdownMenuItem>
-                                {" "}
-                                <Upload />
-                                <span>Import</span>
-                                <DropdownMenuShortcut>⇧⌘I</DropdownMenuShortcut>
-                            </DropdownMenuItem>
-                            <DropdownMenuItem>
-                                {" "}
-                                <Download />
-                                <span>Export</span>
-                                <DropdownMenuShortcut>⇧⌘E</DropdownMenuShortcut>
-                            </DropdownMenuItem>
-                        </DropdownMenuContent>
-                    </DropdownMenu>
+                    <div className="flex gap-2">
+                        <Button
+                            variant={"outline"}
+                            className="ml-auto border-green-500 text-green-500 hover:bg-green-500 hover:text-white"
+                        >
+                            {" "}
+                            Terima
+                        </Button>
+                        <Button
+                            variant="outline"
+                            className="ml-auto border-red-500 text-red-500 hover:bg-red-500 hover:text-white"
+                        >
+                            Tolak
+                        </Button>
+                    </div>
                 </div>
                 <div className="rounded-md border">
                     <Table>

@@ -21,6 +21,7 @@ import { Link } from "@inertiajs/react";
 
 export function NavMaster({
     items,
+    user,
 }: {
     items: {
         title: string;
@@ -33,6 +34,7 @@ export function NavMaster({
             url: string;
         }[];
     }[];
+    user: any;
 }) {
     return (
         <SidebarGroup>
