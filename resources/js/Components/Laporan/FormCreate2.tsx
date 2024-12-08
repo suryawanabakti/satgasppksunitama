@@ -133,7 +133,7 @@ export default function FormCreate2({ laporan }: { laporan: any }) {
             </div>
             <Button
                 className="mt-3"
-                onClick={() => router.get(route("user-laporan.index"))}
+                onClick={() => router.get(route("user-informasi.index"))}
             >
                 Simpan
             </Button>

@@ -15,7 +15,7 @@ class UserLaporanController extends Controller
 {
     public function index(#[CurrentUser] User $user)
     {
-        $laporan = UserLaporanResource::collection(Laporan::with(['user', 'files'])->where('user_id', $user->id)->get());
+        $laporan = UserLaporanResource::collection(Laporan::orderBy('created_at', 'DESC')->with(['user', 'files'])->where('user_id', $user->id)->get());
 
         return Inertia::render("User/Laporan/page", ["laporan" => $laporan]);
     }
@@ -27,13 +27,18 @@ class UserLaporanController extends Controller
 
     public function step1(Request $request, #[CurrentUser()] User $user)
     {
+
         $request->validate([
             'judul' => ['required', 'max:255'],
-            'deskripsi' => ['required']
+            'deskripsi' => ['required'],
+            'kategori' => ['required'],
+            'status_pelapor' => ['required']
         ]);
 
         $laporan = Laporan::create([
             'user_id' => $user->id,
+            'kategori' => $request->kategori,
+            'status_pelapor' => $request->status_pelapor,
             'judul' => $request->judul,
             'deskripsi' => $request->deskripsi,
             'status' => 'PROSES'
@@ -68,7 +73,7 @@ class UserLaporanController extends Controller
 
     public function destroy(Laporan $laporan)
     {
-        $laporan->delete();
+        if ($laporan->status === 'PROSES')   $laporan->delete();
         return back();
     }
 

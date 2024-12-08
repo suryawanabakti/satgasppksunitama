@@ -55,7 +55,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             </SidebarHeader>
             <SidebarContent>
                 <NavMain user={user} />
-                <NavMaster user={user} items={data.navMaster} />
+                {user.role == "SATGAS PPKS" && (
+                    <NavMaster user={user} items={data.navMaster} />
+                )}
             </SidebarContent>
             <SidebarFooter>
                 <NavUser user={data.user} />

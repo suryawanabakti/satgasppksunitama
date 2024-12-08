@@ -53,12 +53,15 @@ import {
     CardTitle,
 } from "./ui/card";
 import { router } from "@inertiajs/react";
+import { Badge } from "./ui/badge";
 
 export type Laporan = {
     id: string;
-    title: string;
+    judul: string;
     deskripsi: string;
     status: string;
+    files: any;
+    user: any;
     updated_at: string;
 };
 
@@ -67,39 +70,70 @@ export function DataTableLaporan({ data }: { data: Laporan[] }) {
 
     const columns: ColumnDef<Laporan>[] = [
         {
-            id: "select",
-            header: ({ table }) => (
-                <Checkbox
-                    checked={
-                        table.getIsAllPageRowsSelected() ||
-                        (table.getIsSomePageRowsSelected() && "indeterminate")
-                    }
-                    onCheckedChange={(value) =>
-                        table.toggleAllPageRowsSelected(!!value)
-                    }
-                    aria-label="Select all"
-                />
-            ),
-            cell: ({ row }) => (
-                <Checkbox
-                    value={row.getValue("id")}
-                    checked={row.getIsSelected()}
-                    onCheckedChange={(value) => {
-                        row.toggleSelected(!!value);
-
-                        setRowsSelected((prevSelected): any =>
-                            prevSelected.includes(row.getValue("id"))
-                                ? prevSelected.filter(
-                                      (rowId) => rowId !== row.getValue("id")
-                                  )
-                                : [...prevSelected, row.getValue("id")]
-                        );
-                    }}
-                    aria-label="Select row"
-                />
-            ),
-            enableSorting: false,
+            id: "actions",
             enableHiding: false,
+            cell: ({ row }) => {
+                const laporan = row.original;
+
+                return (
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" className="h-8 w-8 p-0">
+                                <span className="sr-only">Open menu</span>
+                                <MoreHorizontal className="h-4 w-4" />
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                            <DropdownMenuItem
+                                onClick={() =>
+                                    router.delete(
+                                        route("laporan.destroy", laporan.id),
+                                        {
+                                            preserveScroll: true,
+                                            preserveState: true,
+                                        }
+                                    )
+                                }
+                            >
+                                Delete
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                                onClick={() =>
+                                    router.patch(
+                                        route(
+                                            "admin-laporan.terima",
+                                            laporan.id
+                                        ),
+                                        {
+                                            preserveScroll: true,
+                                            preserveState: true,
+                                        }
+                                    )
+                                }
+                            >
+                                Terima
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                                onClick={() =>
+                                    router.patch(
+                                        route(
+                                            "admin-laporan.tolak",
+                                            laporan.id
+                                        ),
+                                        {
+                                            preserveScroll: true,
+                                            preserveState: true,
+                                        }
+                                    )
+                                }
+                            >
+                                Tolak
+                            </DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                );
+            },
         },
         {
             accessorKey: "id",
@@ -112,7 +146,7 @@ export function DataTableLaporan({ data }: { data: Laporan[] }) {
                         }
                     >
                         ID
-                        <ArrowUpDown className="ml-2 h-4 w-4" />
+                        <ArrowUpDown className="" />
                     </Button>
                 );
             },
@@ -122,7 +156,27 @@ export function DataTableLaporan({ data }: { data: Laporan[] }) {
             enableSorting: true,
         },
         {
-            accessorKey: "Judul",
+            accessorKey: "User",
+            header: ({ column }) => {
+                return (
+                    <Button
+                        variant="ghost"
+                        onClick={() =>
+                            column.toggleSorting(column.getIsSorted() === "asc")
+                        }
+                    >
+                        User
+                        <ArrowUpDown className="ml-2 h-4 w-4" />
+                    </Button>
+                );
+            },
+            cell: ({ row }) => {
+                const user = row.original.user;
+                return <span>{user.name}</span>;
+            },
+        },
+        {
+            accessorKey: "judul",
             header: ({ column }) => {
                 return (
                     <Button
@@ -138,6 +192,46 @@ export function DataTableLaporan({ data }: { data: Laporan[] }) {
             },
             cell: ({ row }) => (
                 <div className="lowercase">{row.getValue("judul")}</div>
+            ),
+        },
+        {
+            accessorKey: "status_pelapor",
+            header: ({ column }) => {
+                return (
+                    <Button
+                        variant="ghost"
+                        onClick={() =>
+                            column.toggleSorting(column.getIsSorted() === "asc")
+                        }
+                    >
+                        Status
+                        <ArrowUpDown className="ml-2 h-4 w-4" />
+                    </Button>
+                );
+            },
+            cell: ({ row }) => (
+                <div className="lowercase">
+                    {row.getValue("status_pelapor")}
+                </div>
+            ),
+        },
+        {
+            accessorKey: "kategori",
+            header: ({ column }) => {
+                return (
+                    <Button
+                        variant="ghost"
+                        onClick={() =>
+                            column.toggleSorting(column.getIsSorted() === "asc")
+                        }
+                    >
+                        kategori
+                        <ArrowUpDown className="ml-2 h-4 w-4" />
+                    </Button>
+                );
+            },
+            cell: ({ row }) => (
+                <div className="lowercase">{row.getValue("kategori")}</div>
             ),
         },
 
@@ -170,12 +264,65 @@ export function DataTableLaporan({ data }: { data: Laporan[] }) {
                             column.toggleSorting(column.getIsSorted() === "asc")
                         }
                     >
-                        Daftar Gambar
+                        Daftar File
                         <ArrowUpDown className="ml-2 h-4 w-4" />
                     </Button>
                 );
             },
-            cell: ({ row }) => <div className=""></div>,
+            cell: ({ row }) => {
+                const laporan = row.original; // Dapatkan data asli dari baris
+                console.log(laporan); // Debug untuk melihat data laporan
+
+                // Pastikan `files` adalah array
+                if (!Array.isArray(laporan.files)) {
+                    return <span>No Files</span>; // Handle jika `files` bukan array
+                }
+
+                // Tampilkan data file
+                return (
+                    <div>
+                        {laporan.files.map((file: any, index: number) => (
+                            <div key={index}>
+                                <a
+                                    href={`storage/${file.path}`}
+                                    className="text-primary"
+                                    target="_blank"
+                                >
+                                    Download File {index + 1}
+                                </a>
+                            </div> // Ganti `file` sesuai dengan properti file (contoh: file.name)
+                        ))}
+                    </div>
+                );
+            },
+        },
+
+        {
+            accessorKey: "status",
+            header: ({ column }) => {
+                return (
+                    <Button
+                        variant="ghost"
+                        onClick={() =>
+                            column.toggleSorting(column.getIsSorted() === "asc")
+                        }
+                    >
+                        Status
+                        <ArrowUpDown className="ml-2 h-4 w-4" />
+                    </Button>
+                );
+            },
+            cell: ({ row }) => (
+                <Badge
+                    className={`${
+                        row.original.status == "DISETUJUI"
+                            ? "bg-green-500 hover:bg-green-300"
+                            : ""
+                    } `}
+                >
+                    {row.original.status}
+                </Badge>
+            ),
         },
         {
             accessorKey: "created_at",
@@ -199,41 +346,6 @@ export function DataTableLaporan({ data }: { data: Laporan[] }) {
                     )}
                 </div>
             ),
-        },
-
-        {
-            id: "actions",
-            enableHiding: false,
-            cell: ({ row }) => {
-                const article = row.original;
-
-                return (
-                    <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" className="h-8 w-8 p-0">
-                                <span className="sr-only">Open menu</span>
-                                <MoreHorizontal className="h-4 w-4" />
-                            </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                            <DropdownMenuItem
-                                onClick={() =>
-                                    router.delete(
-                                        route("articles.destroy", article.id),
-                                        {
-                                            preserveScroll: true,
-                                            preserveState: true,
-                                        }
-                                    )
-                                }
-                            >
-                                Delete
-                            </DropdownMenuItem>
-                        </DropdownMenuContent>
-                    </DropdownMenu>
-                );
-            },
         },
     ];
 
@@ -296,21 +408,7 @@ export function DataTableLaporan({ data }: { data: Laporan[] }) {
                         onChange={handleFilterChange}
                         className="max-w-sm"
                     />
-                    <div className="flex gap-2">
-                        <Button
-                            variant={"outline"}
-                            className="ml-auto border-green-500 text-green-500 hover:bg-green-500 hover:text-white"
-                        >
-                            {" "}
-                            Terima
-                        </Button>
-                        <Button
-                            variant="outline"
-                            className="ml-auto border-red-500 text-red-500 hover:bg-red-500 hover:text-white"
-                        >
-                            Tolak
-                        </Button>
-                    </div>
+                    <div className="flex gap-2"></div>
                 </div>
                 <div className="rounded-md border">
                     <Table>

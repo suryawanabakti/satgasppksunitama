@@ -86,6 +86,15 @@ export function LoginForm({
                         Login
                     </Button>
                 </div>
+
+                <div className="text-center mt-3">
+                    <Link
+                        href="/register"
+                        className="text-sm mt-2 text-primary"
+                    >
+                        Belum daftar ? Silahkan klik disini!
+                    </Link>
+                </div>
             </CardContent>
         </Card>
     );

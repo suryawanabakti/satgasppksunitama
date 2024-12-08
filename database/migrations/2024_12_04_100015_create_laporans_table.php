@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete();
+            $table->string('kategori');
+            $table->string('status_pelapor');
             $table->string('judul');
             $table->text('deskripsi');
             $table->enum('status', ['PROSES', 'DISETUJUI', 'DITOLAK']);

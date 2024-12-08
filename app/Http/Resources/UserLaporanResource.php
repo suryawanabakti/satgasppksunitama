@@ -17,6 +17,8 @@ class UserLaporanResource extends JsonResource
         return [
             'id' => $this->id,
             "user" => $this->user,
+            "status_pelapor" => $this->status_pelapor,
+            "kategori" => $this->kategori,
             "judul" => $this->judul,
             "deskripsi" => $this->deskripsi,
             "files" => $this->whenLoaded('files'),

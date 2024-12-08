@@ -1,6 +1,6 @@
 "use client";
 
-import { Database, File, Home } from "lucide-react";
+import { Database, File, Home, Info } from "lucide-react";
 
 import {
     SidebarGroup,
@@ -40,15 +40,6 @@ export function NavMain({ user }: any) {
                                     <span>Laporan</span>
                                 </Link>
                             </SidebarMenuButton>
-                            <SidebarMenuButton
-                                asChild
-                                isActive={route().current("articles*")}
-                            >
-                                <Link href={route("articles.index")}>
-                                    <Database />
-                                    <span>Article</span>
-                                </Link>
-                            </SidebarMenuButton>
                         </SidebarMenuItem>
                     </SidebarMenu>
                 )}
@@ -75,13 +66,15 @@ export function NavMain({ user }: any) {
                                     <span>Laporan</span>
                                 </Link>
                             </SidebarMenuButton>
+                        </SidebarMenuItem>
+                        <SidebarMenuItem>
                             <SidebarMenuButton
                                 asChild
-                                isActive={route().current("articles*")}
+                                isActive={route().current("user-informasi*")}
                             >
-                                <Link href={route("articles.index")}>
-                                    <Database />
-                                    <span>Article</span>
+                                <Link href={route("user-informasi.index")}>
+                                    <Info />
+                                    <span>Informasi</span>
                                 </Link>
                             </SidebarMenuButton>
                         </SidebarMenuItem>

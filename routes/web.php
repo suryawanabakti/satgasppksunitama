@@ -4,9 +4,11 @@ use App\Http\Controllers\AdminLaporanController;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\UserInformation;
 use App\Http\Controllers\UserLaporanController;
 use App\Models\User;
 use Illuminate\Foundation\Application;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -19,7 +21,11 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/dashboard', function () {
+Route::get('/dashboard', function (Request $request) {
+    if ($request->user()->role == 'USER') {
+        return redirect('/dashboard-user');
+    }
+
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
@@ -38,6 +44,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/admin-laporan', [AdminLaporanController::class, 'index'])->name('admin-laporan.index');
     Route::get('/admin-laporan/create', [AdminLaporanController::class, 'create'])->name('admin-laporan.create');
     Route::delete('/admin-laporan/{laporan}', [AdminLaporanController::class, 'destroy'])->name('admin-laporan.destroy');
+    Route::patch('/admin-laporan/{laporan}/terima', [AdminLaporanController::class, 'terima'])->name('admin-laporan.terima');
+    Route::patch('/admin-laporan/{laporan}/tolak', [AdminLaporanController::class, 'tolak'])->name('admin-laporan.tolak');
 
     Route::get('/articles', [ArticleController::class, 'index'])->name('articles.index');
     Route::delete('/articles/{article}', [ArticleController::class, 'destroy'])->name('articles.destroy');
@@ -58,6 +66,8 @@ Route::middleware('auth')->group(function () {
 
     Route::delete('/user-laporan/{laporan}', [UserLaporanController::class, 'destroy'])->name('user-laporan.destroy');
     Route::delete('/user-laporan/file/{file}', [UserLaporanController::class, 'destroyFile'])->name('user-laporan.file.destroy');
+
+    Route::get('/user-informasi', UserInformation::class)->name('user-informasi.index');
 });
 
 require __DIR__ . '/auth.php';

@@ -41,7 +41,6 @@ const formSchema = z.object({
     password_confirmation: z.string({
         message: "Konfirmasi password harus di isi",
     }),
-    role: z.string({ message: "Role harus di pilih" }),
 });
 
 export default function MyForm() {
@@ -61,13 +60,17 @@ export default function MyForm() {
     const { toast } = useToast();
     function onSubmit(values: z.infer<typeof formSchema>) {
         try {
-            router.post(route("users.store"), values, {
+            router.post(route("register"), values, {
                 preserveScroll: true,
                 preserveState: true,
                 onSuccess: () => {
                     toast({
                         description: "Berhasil tambah user ✅" + values.name,
                     });
+                },
+                onError: (err) => {
+                    alert("err");
+                    console.log(err);
                 },
             });
         } catch (error) {
@@ -80,7 +83,7 @@ export default function MyForm() {
 
     return (
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 ">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
                 <FormField
                     control={form.control}
                     name="name"
@@ -107,93 +110,23 @@ export default function MyForm() {
                     name="username"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Username</FormLabel>
+                            <FormLabel>Email</FormLabel>
                             <FormControl>
                                 <Input
-                                    placeholder="Masukkan username..."
-                                    type="text"
+                                    placeholder="Masukkan email..."
+                                    type="email"
                                     {...field}
                                 />
                             </FormControl>
                             <FormDescription>
-                                Ini adalah username untuk masuk ke aplikasi
+                                Ini adalah email untuk masuk ke aplikasi dan
+                                merima notifikasi
                             </FormDescription>
                             <FormMessage />
                         </FormItem>
                     )}
                 />
-                <FormField
-                    control={form.control}
-                    name="role"
-                    render={({ field }) => (
-                        <FormItem className="flex flex-col">
-                            <FormLabel>Role</FormLabel>
-                            <Popover>
-                                <PopoverTrigger asChild>
-                                    <FormControl>
-                                        <Button
-                                            variant="outline"
-                                            role="combobox"
-                                            className={cn(
-                                                "w-[200px] justify-between",
-                                                !field.value &&
-                                                    "text-muted-foreground"
-                                            )}
-                                        >
-                                            {field.value
-                                                ? languages.find(
-                                                      (language) =>
-                                                          language.value ===
-                                                          field.value
-                                                  )?.label
-                                                : "Pilih Role"}
-                                            <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                                        </Button>
-                                    </FormControl>
-                                </PopoverTrigger>
-                                <PopoverContent className="w-[200px] p-0">
-                                    <Command>
-                                        <CommandInput placeholder="Search role..." />
-                                        <CommandList>
-                                            <CommandEmpty>
-                                                No role found.
-                                            </CommandEmpty>
-                                            <CommandGroup>
-                                                {languages.map((language) => (
-                                                    <CommandItem
-                                                        value={language.label}
-                                                        key={language.value}
-                                                        onSelect={() => {
-                                                            form.setValue(
-                                                                "role",
-                                                                language.value
-                                                            );
-                                                        }}
-                                                    >
-                                                        <Check
-                                                            className={cn(
-                                                                "mr-2 h-4 w-4",
-                                                                language.value ===
-                                                                    field.value
-                                                                    ? "opacity-100"
-                                                                    : "opacity-0"
-                                                            )}
-                                                        />
-                                                        {language.label}
-                                                    </CommandItem>
-                                                ))}
-                                            </CommandGroup>
-                                        </CommandList>
-                                    </Command>
-                                </PopoverContent>
-                            </Popover>
-                            <FormDescription>
-                                This is the role that will be used in the user.
-                            </FormDescription>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
+
                 <FormField
                     control={form.control}
                     name="password"
@@ -236,7 +169,7 @@ export default function MyForm() {
                     )}
                 />
 
-                <Button type="submit">Submit</Button>
+                <Button type="submit">Register</Button>
             </form>
         </Form>
     );

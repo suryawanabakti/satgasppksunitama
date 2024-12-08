@@ -53,6 +53,7 @@ import {
     CardTitle,
 } from "./ui/card";
 import { router } from "@inertiajs/react";
+import { Badge } from "./ui/badge";
 
 export type Laporan = {
     id: string;
@@ -141,6 +142,46 @@ export function DataTableLaporanUser({ data }: { data: Laporan[] }) {
                 <div className="lowercase">{row.getValue("judul")}</div>
             ),
         },
+        {
+            accessorKey: "status_pelapor",
+            header: ({ column }) => {
+                return (
+                    <Button
+                        variant="ghost"
+                        onClick={() =>
+                            column.toggleSorting(column.getIsSorted() === "asc")
+                        }
+                    >
+                        Status
+                        <ArrowUpDown className="ml-2 h-4 w-4" />
+                    </Button>
+                );
+            },
+            cell: ({ row }) => (
+                <div className="lowercase">
+                    {row.getValue("status_pelapor")}
+                </div>
+            ),
+        },
+        {
+            accessorKey: "kategori",
+            header: ({ column }) => {
+                return (
+                    <Button
+                        variant="ghost"
+                        onClick={() =>
+                            column.toggleSorting(column.getIsSorted() === "asc")
+                        }
+                    >
+                        kategori
+                        <ArrowUpDown className="ml-2 h-4 w-4" />
+                    </Button>
+                );
+            },
+            cell: ({ row }) => (
+                <div className="lowercase">{row.getValue("kategori")}</div>
+            ),
+        },
 
         {
             accessorKey: "deskripsi",
@@ -220,7 +261,15 @@ export function DataTableLaporanUser({ data }: { data: Laporan[] }) {
                 );
             },
             cell: ({ row }) => (
-                <div className="lowercase">{row.original.status}</div>
+                <Badge
+                    className={`${
+                        row.original.status == "DISETUJUI"
+                            ? "bg-green-500 hover:bg-green-300"
+                            : ""
+                    } `}
+                >
+                    {row.original.status}
+                </Badge>
             ),
         },
         {
@@ -250,7 +299,7 @@ export function DataTableLaporanUser({ data }: { data: Laporan[] }) {
             id: "actions",
             enableHiding: false,
             cell: ({ row }) => {
-                const article = row.original;
+                const laporan = row.original;
 
                 return (
                     <DropdownMenu>
@@ -265,7 +314,10 @@ export function DataTableLaporanUser({ data }: { data: Laporan[] }) {
                             <DropdownMenuItem
                                 onClick={() =>
                                     router.delete(
-                                        route("articles.destroy", article.id),
+                                        route(
+                                            "user-laporan.destroy",
+                                            laporan.id
+                                        ),
                                         {
                                             preserveScroll: true,
                                             preserveState: true,
