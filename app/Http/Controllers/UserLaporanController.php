@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\UserLaporanResource;
+use App\Mail\LaporanMail;
 use App\Models\Laporan;
 use App\Models\LaporanFile;
 use App\Models\LaporanGambar;
@@ -10,6 +11,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Container\Attributes\CurrentUser;
+use Illuminate\Support\Facades\Mail;
 
 class UserLaporanController extends Controller
 {
@@ -44,6 +46,7 @@ class UserLaporanController extends Controller
             'status' => 'PROSES'
         ]);
 
+        Mail::to(env("MAIL_KETUA"))->send(new LaporanMail("Laporan Baru dari " . auth()->user()->name));
         return redirect("/user-laporan/step2/{$laporan->id}");
     }
 

@@ -261,40 +261,14 @@ export function DataTableLaporanUser({ data }: { data: Laporan[] }) {
                 );
             },
             cell: ({ row }) => (
-                <Badge
-                    className={`${
-                        row.original.status == "DISETUJUI"
-                            ? "bg-green-500 hover:bg-green-300"
-                            : ""
-                    } `}
-                >
-                    {row.original.status}
-                </Badge>
-            ),
-        },
-        {
-            accessorKey: "created_at",
-            header: ({ column }) => {
-                return (
-                    <Button
-                        variant="ghost"
-                        onClick={() =>
-                            column.toggleSorting(column.getIsSorted() === "asc")
-                        }
-                    >
-                        Created At
-                        <ArrowUpDown className="ml-2 h-4 w-4" />
-                    </Button>
-                );
-            },
-            cell: ({ row }) => (
-                <div className="">
-                    {moment(row.getValue("created_at")).format(
-                        "DD MMM YYYY HH:mm:ss"
-                    )}
+                <div>
+                    {row.original.status === "PROSES" &&
+                        "Di lakukan verifikasi"}
+                    {row.original.status === "DISETUJUI" && "Di tindak lanjuti"}
                 </div>
             ),
         },
+
         {
             id: "actions",
             enableHiding: false,

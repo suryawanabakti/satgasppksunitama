@@ -41,6 +41,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/admin-laporan/{laporan}', [AdminLaporanController::class, 'destroy'])->name('admin-laporan.destroy');
     Route::patch('/admin-laporan/{laporan}/terima', [AdminLaporanController::class, 'terima'])->name('admin-laporan.terima');
     Route::patch('/admin-laporan/{laporan}/tolak', [AdminLaporanController::class, 'tolak'])->name('admin-laporan.tolak');
+    Route::delete('/admin-laporan/{laporan}', [AdminLaporanController::class, 'destroy'])->name('admin-laporan.destroy');
 
     Route::get('/articles', [ArticleController::class, 'index'])->name('articles.index');
     Route::delete('/articles/{article}', [ArticleController::class, 'destroy'])->name('articles.destroy');

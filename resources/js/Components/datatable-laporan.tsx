@@ -88,8 +88,13 @@ export function DataTableLaporan({ data }: { data: Laporan[] }) {
                             <DropdownMenuItem
                                 onClick={() =>
                                     router.delete(
-                                        route("laporan.destroy", laporan.id),
+                                        route(
+                                            "admin-laporan.destroy",
+                                            laporan.id
+                                        ),
                                         {
+                                            onBefore: () =>
+                                                confirm("Apakah anda yakin ?"),
                                             preserveScroll: true,
                                             preserveState: true,
                                         }
@@ -112,7 +117,7 @@ export function DataTableLaporan({ data }: { data: Laporan[] }) {
                                     )
                                 }
                             >
-                                Terima
+                                Di tindak lanjuti
                             </DropdownMenuItem>
                             <DropdownMenuItem
                                 onClick={() =>
@@ -313,15 +318,11 @@ export function DataTableLaporan({ data }: { data: Laporan[] }) {
                 );
             },
             cell: ({ row }) => (
-                <Badge
-                    className={`${
-                        row.original.status == "DISETUJUI"
-                            ? "bg-green-500 hover:bg-green-300"
-                            : ""
-                    } `}
-                >
-                    {row.original.status}
-                </Badge>
+                <div>
+                    {row.original.status === "PROSES" &&
+                        "Di lakukan verifikasi"}
+                    {row.original.status === "DISETUJUI" && "Di tindak lanjuti"}
+                </div>
             ),
         },
         {
