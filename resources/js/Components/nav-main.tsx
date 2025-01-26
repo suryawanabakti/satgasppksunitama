@@ -43,6 +43,32 @@ export function NavMain({ user }: any) {
                         </SidebarMenuItem>
                     </SidebarMenu>
                 )}
+                {user.role == "REKTOR" && (
+                    <SidebarMenu>
+                        <SidebarMenuItem>
+                            <SidebarMenuButton
+                                asChild
+                                isActive={route().current("dashboard")}
+                            >
+                                <Link href={route("dashboard")}>
+                                    <Home />
+                                    <span>Home</span>
+                                </Link>
+                            </SidebarMenuButton>
+                        </SidebarMenuItem>
+                        <SidebarMenuItem>
+                            <SidebarMenuButton
+                                asChild
+                                isActive={route().current("rektor-laporan*")}
+                            >
+                                <Link href={route("rektor-laporan.index")}>
+                                    <File />
+                                    <span>Laporan</span>
+                                </Link>
+                            </SidebarMenuButton>
+                        </SidebarMenuItem>
+                    </SidebarMenu>
+                )}
                 {user.role == "USER" && (
                     <SidebarMenu>
                         <SidebarMenuItem>

@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminLaporanController;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RektorLaporanController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserInformation;
 use App\Http\Controllers\UserLaporanController;
@@ -42,6 +43,8 @@ Route::middleware('auth')->group(function () {
     Route::patch('/admin-laporan/{laporan}/terima', [AdminLaporanController::class, 'terima'])->name('admin-laporan.terima');
     Route::patch('/admin-laporan/{laporan}/tolak', [AdminLaporanController::class, 'tolak'])->name('admin-laporan.tolak');
     Route::delete('/admin-laporan/{laporan}', [AdminLaporanController::class, 'destroy'])->name('admin-laporan.destroy');
+
+    Route::get('/rektor-laporan', [RektorLaporanController::class, 'index'])->name('rektor-laporan.index');
 
     Route::get('/articles', [ArticleController::class, 'index'])->name('articles.index');
     Route::delete('/articles/{article}', [ArticleController::class, 'destroy'])->name('articles.destroy');
