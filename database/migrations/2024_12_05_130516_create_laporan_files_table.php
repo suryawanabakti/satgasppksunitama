@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('laporan_file', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('laporan_id');
-            $table->foreign('laporan_id')->references('id')->on('users')->cascadeOnDelete();
+            $table->foreign('laporan_id')->references('id')->on('laporan')->cascadeOnDelete();
             $table->enum('type', ['gambar', 'file']);
             $table->string('path');
             $table->timestamps();

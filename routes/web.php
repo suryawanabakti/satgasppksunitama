@@ -34,8 +34,10 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/users', [UserController::class, 'index'])->name('users.index');
     Route::get('/users/create', [UserController::class, 'create'])->name('users.create');
+    Route::get('/users/{user}', [UserController::class, 'edit'])->name('users.edit');
+    Route::patch('/users/{user}', [UserController::class, 'update'])->name('users.update');
     Route::post('/users', [UserController::class, 'store'])->name('users.store');
-    Route::delete('/users/{article}', [UserController::class, 'destroy'])->name('users.destroy');
+    Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
 
     Route::get('/admin-laporan', [AdminLaporanController::class, 'index'])->name('admin-laporan.index');
     Route::get('/admin-laporan/create', [AdminLaporanController::class, 'create'])->name('admin-laporan.create');
@@ -55,6 +57,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::get('/user-laporan', [UserLaporanController::class, 'index'])->name('user-laporan.index');
+    Route::get('/surat/{laporan}', [UserLaporanController::class, 'cetak'])->name('user-laporan.cetak');
 
     Route::get('/user-laporan/create', [UserLaporanController::class, 'create'])->name('user-laporan.create');
     Route::post('/user-laporan/step1', [UserLaporanController::class, 'step1'])->name('user-laporan.step1');

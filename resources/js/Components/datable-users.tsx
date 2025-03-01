@@ -239,8 +239,20 @@ export function DataTableUsers({ data }: { data: Users[] }) {
                         <DropdownMenuContent align="end">
                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
                             <DropdownMenuSeparator />
-                            <DropdownMenuItem>Edit</DropdownMenuItem>
-                            <DropdownMenuItem>Hapus</DropdownMenuItem>
+                            <DropdownMenuItem
+                                onClick={() =>
+                                    router.get("/users/" + payment.id)
+                                }
+                            >
+                                Edit
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                                onClick={() =>
+                                    router.delete("/users/" + payment.id)
+                                }
+                            >
+                                Hapus
+                            </DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
                 );

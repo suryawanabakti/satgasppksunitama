@@ -36,7 +36,7 @@ export function LoginForm({
     return (
         <Card className="mx-auto max-w-sm">
             <CardHeader>
-                <CardTitle className="text-2xl">Login</CardTitle>
+                <CardTitle className="text-2xl">Masuk</CardTitle>
                 <CardDescription>
                     Masukkan username dan password anda di form bawah ini.
                 </CardDescription>

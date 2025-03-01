@@ -301,6 +301,14 @@ export function DataTableLaporanUser({ data }: { data: Laporan[] }) {
                             >
                                 Delete
                             </DropdownMenuItem>
+                            <DropdownMenuItem asChild>
+                                <a
+                                    href={`/surat/${laporan.id}`}
+                                    target="_blank"
+                                >
+                                    Cetak Surat
+                                </a>
+                            </DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
                 );

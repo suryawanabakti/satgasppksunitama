@@ -8,6 +8,7 @@ use App\Models\Laporan;
 use App\Models\LaporanFile;
 use App\Models\LaporanGambar;
 use App\Models\User;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Container\Attributes\CurrentUser;
@@ -15,6 +16,13 @@ use Illuminate\Support\Facades\Mail;
 
 class UserLaporanController extends Controller
 {
+    public function cetak(Laporan $laporan)
+    {
+        $pdf  = Pdf::loadView('surat', ['laporan' => $laporan]);
+        return $pdf->stream();
+        // return view('surat', ['laporan' => $laporan]);
+    }
+
     public function index(#[CurrentUser] User $user)
     {
         $laporan = UserLaporanResource::collection(Laporan::orderBy('created_at', 'DESC')->with(['user', 'files'])->where('user_id', $user->id)->get());
@@ -58,6 +66,7 @@ class UserLaporanController extends Controller
 
     public function step2Store(Laporan $laporan, Request $request, #[CurrentUser()] User $user)
     {
+
         $file = $request->file('file');
         if ($file->isValid() && in_array($file->getClientMimeType(), ['image/jpeg', 'image/png', 'image/gif'])) {
             $type = 'gambar';
