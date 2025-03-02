@@ -64,7 +64,7 @@ export default function Dashboard() {
                                         Ketua
                                     </h4>
                                     <p className="text-sm text-blue-600">
-                                        Dr. Nama Ketua, M.Pd
+                                        Listia Utami
                                     </p>
                                 </div>
                                 <div className="bg-blue-100/30 p-3 rounded-md border-l-4 border-blue-400">
@@ -72,7 +72,7 @@ export default function Dashboard() {
                                         Sekretaris
                                     </h4>
                                     <p className="text-sm text-blue-600">
-                                        Nama Sekretaris, S.Kom., M.Kom
+                                        Harman Akbar
                                     </p>
                                 </div>
                                 <div>
@@ -80,9 +80,11 @@ export default function Dashboard() {
                                         Anggota
                                     </h4>
                                     <ul className="list-disc list-inside text-sm text-blue-600 mt-2 space-y-1">
-                                        <li>Nama Anggota 1, S.H., M.H</li>
-                                        <li>Nama Anggota 2, S.Psi., M.Psi</li>
-                                        <li>Nama Anggota 3, S.Sos., M.Si</li>
+                                        <li>Nursyafika</li>
+                                        <li>Irawati</li>
+                                        <li>Asrul dzani</li>
+                                        <li>Febronia</li>
+                                        <li>Andi Sulfaeni</li>
                                     </ul>
                                 </div>
                             </div>
